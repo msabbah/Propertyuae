@@ -2,10 +2,12 @@ import pandas as pd
 import numpy as np
 import streamlit as st
 from pathlib import Path
+from io import BytesIO
 import config
 
 DATA_PATH_GZ = Path(__file__).parent / "recent_sales.csv.gz"
 DATA_PATH    = Path(__file__).parent / "recent_sales.csv"
+_REMOTE_CSV_GZ = "https://raw.githubusercontent.com/msabbah/Propertyuae/main/recent_sales.csv.gz"
 MERGED_PATH = Path(__file__).parent / "merged_sales.csv"
 
 # Columns used to fingerprint a unique transaction for deduplication
@@ -173,8 +175,15 @@ def merge_transactions(df_existing: pd.DataFrame, df_new: pd.DataFrame) -> pd.Da
 
 @st.cache_data(ttl=3600, show_spinner="Loading and cleaning data...")
 def load_data() -> pd.DataFrame:
-    src = DATA_PATH_GZ if DATA_PATH_GZ.exists() else DATA_PATH
-    df = pd.read_csv(src, encoding="utf-8-sig", compression="infer")
+    if DATA_PATH.exists():
+        df = pd.read_csv(DATA_PATH, encoding="utf-8-sig")
+    elif DATA_PATH_GZ.exists():
+        df = pd.read_csv(DATA_PATH_GZ, encoding="utf-8-sig", compression="gzip")
+    else:
+        import requests
+        resp = requests.get(_REMOTE_CSV_GZ, timeout=60)
+        resp.raise_for_status()
+        df = pd.read_csv(BytesIO(resp.content), encoding="utf-8-sig", compression="gzip")
     return clean_raw_df(df)
 
 
