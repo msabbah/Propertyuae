@@ -1,3 +1,15 @@
+# Data files (too large for GitHub)
+recent_sales.csv
+*.html
+
+# Cache files
+geocache.json
+pf_cache.json
+pf_history.json
+
+# OS
+.DS_Store
+
 .streamlit/secrets.toml
 
 # Byte-compiled / optimized / DLL files
