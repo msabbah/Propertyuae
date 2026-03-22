@@ -4,7 +4,8 @@ import streamlit as st
 from pathlib import Path
 import config
 
-DATA_PATH   = Path(__file__).parent / "recent_sales.csv"
+DATA_PATH_GZ = Path(__file__).parent / "recent_sales.csv.gz"
+DATA_PATH    = Path(__file__).parent / "recent_sales.csv"
 MERGED_PATH = Path(__file__).parent / "merged_sales.csv"
 
 # Columns used to fingerprint a unique transaction for deduplication
@@ -172,7 +173,8 @@ def merge_transactions(df_existing: pd.DataFrame, df_new: pd.DataFrame) -> pd.Da
 
 @st.cache_data(ttl=3600, show_spinner="Loading and cleaning data...")
 def load_data() -> pd.DataFrame:
-    df = pd.read_csv(DATA_PATH, encoding="utf-8-sig")
+    src = DATA_PATH_GZ if DATA_PATH_GZ.exists() else DATA_PATH
+    df = pd.read_csv(src, encoding="utf-8-sig", compression="infer")
     return clean_raw_df(df)
 
 

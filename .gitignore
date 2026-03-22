@@ -1,4 +1,5 @@
-# HTML files
+# Data files (keep compressed version in repo)
+recent_sales.csv
 *.html
 
 # Cache files
