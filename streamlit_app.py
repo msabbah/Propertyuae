@@ -237,7 +237,7 @@ h1 {
 """, unsafe_allow_html=True)
 
 st.title("Abu Dhabi Residential Property Market")
-st.caption("Transaction data 2019–2026 · Source: Abu Dhabi Department of Municipalities and Transport")
+st.caption("Transaction data 2019–2026 · Source: Abu Dhabi Department of Municipalities and Transport · v2.1")
 
 
 # ── Load data ─────────────────────────────────────────────────────────────────
